@@ -258,4 +258,46 @@ const INFO = {
   },
   na: {
     no:  'Noradrenalin wird nach der Freisetzung durch den NET-Transporter aufgenommen. Bei ADHS führt ein verminderter noradrenerger Tonus im präfrontalen Kortex zu einem geschwächten Aufmerksamkeitsfilter — relevante Signale werden schlechter verstärkt, Ablenkungen schlechter unterdrückt.',
-    ldx: 'd-Amphetamin kehrt den N
+    ldx: 'd-Amphetamin kehrt den NET genauso um wie den DAT — aktiver Efflux von Noradrenalin in den Spalt. Die verstärkte Stimulation von α1- und β-Adrenorezeptoren im präfrontalen Kortex verbessert das Signal-Rausch-Verhältnis, stärkt das Arbeitsgedächtnis und schärft die Impulskontrolle. Die noradrenerge Wirkkomponente ergänzt den dopaminergen Mechanismus und deckt damit das gesamte ADHS-Symptomspektrum ab.'
+  },
+  sht: {
+    no:  'Serotonin wird nach der Freisetzung durch den SERT-Transporter aus dem Spalt entfernt. Die serotonerge Transmission ist kein primärer Treiber der ADHS-Pathophysiologie, beeinflusst aber Stimmung, Schlaf und Appetit.',
+    ldx: 'd-Amphetamin hat eine etwa 10-fach geringere Affinität zum SERT als zu DAT oder NET. Es kommt nur zu einem minimalen Anstieg des synaptischen Serotonins mit vernachlässigbarer Rezeptoraktivierung — sichtbar am blassen Efflux-Pfeil und der schwachen Rezeptorpulsation. Diese residuale 5-HT-Wirkung ist bei therapeutischen Dosen klinisch nicht relevant. LDX gilt daher als primär dopaminerg-noradrenerg wirkend.'
+  }
+};
+let nt = 'da', drug = 'no';
+function applyColors(n) {
+  const c = C[n];
+  ['nt1','nt2','nt3','nr1','nr2','nr3'].forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('fill', c.main); });
+  document.querySelectorAll('.nex1,.nex2,.nex3,.nex4,.nex5,.nex6').forEach(el => el.setAttribute('fill', c.main));
+  ['vc1','vc2','vc3'].forEach(id => { const el = document.getElementById(id); if(el) el.setAttribute('fill', c.main); });
+  ['t1','t2','t3','lgtrp'].forEach(id => { const el = document.getElementById(id); if(el) { el.setAttribute('fill', c.trpF); el.setAttribute('stroke', c.trpS); } });
+  ['tl1','tl2','tl3'].forEach(id => { const el = document.getElementById(id); if(el) el.textContent = c.trpLbl; });
+  ['rc1','rc2','rc3','lgrec'].forEach(id => { const el = document.getElementById(id); if(el) { el.setAttribute('fill', c.recF); el.setAttribute('stroke', c.recS); } });
+  document.getElementById('postbox').setAttribute('class', c.postCls);
+  document.getElementById('lgnt').setAttribute('fill', c.main);
+  document.getElementById('lgntl').textContent = c.ntLbl;
+  document.getElementById('lgtrpl').textContent = c.trpLbl + '-Transporter';
+  document.getElementById('lgrecl').textContent = c.recLbl;
+  document.getElementById('tlbl').textContent = 'Präsynaptisches Terminal (' + c.sub + ')';
+  document.getElementById('plbl').textContent = 'Postsynaptische Dendrite (' + c.sub + ')';
+}
+function applyState() {
+  document.getElementById('W').className = drug + ' ' + nt;
+  document.getElementById('pdiv').style.display = drug === 'ldx' ? 'block' : 'none';
+  const sig = SIG[nt][drug];
+  const bar = document.getElementById('sbar');
+  bar.style.width = sig + '%';
+  bar.style.background = sig < 30 ? '#9CA3AF' : C[nt].sigC;
+  document.getElementById('sval').textContent = sig < 30 ? 'Niedrig' : sig > 70 ? 'Hoch' : 'Gering';
+  document.getElementById('ibox').textContent = INFO[nt][drug];
+  ['da','na','sht'].forEach(n => document.getElementById('b'+n).classList.toggle('active', nt === n));
+  ['no','ldx'].forEach(d => document.getElementById('b'+d).classList.toggle('active', drug === d));
+}
+function setNT(n)   { nt = n;   applyColors(n); applyState(); }
+function setDrug(d) { drug = d; applyState(); }
+applyColors('da');
+applyState();
+</script>
+</body>
+</html>
